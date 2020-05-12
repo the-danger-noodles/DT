@@ -3,11 +3,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin'); // at the top
 
 module.exports = {
   watch: false,
-  mode: 'development',
+  mode: process.env.NODE_ENV,
   entry: './src/index.js',
   output: {
-    filename: 'main.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'build'),
+    filename: 'bundle.js',
   },
   module: {
     rules: [
@@ -37,12 +37,23 @@ module.exports = {
   ],
   devServer: {
     historyApiFallback: true,
-    contentBase: path.join(__dirname, 'dist'),
+    // contentBase: path.join(__dirname, 'dist'),
+    publicPath: '/build/',
     proxy: {
-      '/verify': 'http://localhost:3000/',
-      '/api': 'http://localhost:3000/',
-      '/': 'http://localhost:3000/',
-      '/authorize': 'http://localhost:3000/',
+      '/': {
+        target: 'http://localhost:3000',
+      },
     },
+    
+    
+    
+    // proxy: [{
+    //   // context: ['/api', '/authorize'],
+    //   // target: 'http://localhost:3000',
+    //   '/': 'http://localhost:3000/',
+    //   // '/api': 'http://localhost:3000/',
+    //   // '/': 'http://localhost:3000/',
+    //   // '/authorize': 'http://localhost:3000/',
+    // }],
   },
 };
