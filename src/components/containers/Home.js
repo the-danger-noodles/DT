@@ -45,7 +45,7 @@ function Home() {
       .split(',')
       .map((word) => word.trim())
       .join('&');
-    fetch(`http://localhost:/api/${locationString}`)
+    fetch(`http://localhost:3000/api/${locationString}`)
       .then((data) => data.json())
       .then((response) => {
         setCurrent(response);
