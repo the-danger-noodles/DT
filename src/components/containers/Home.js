@@ -28,7 +28,7 @@ function Home() {
 
   //initial load
   useEffect(() => {
-    fetch('http://localhost:3000/api/user')
+    fetch('/api/user')
       .then((res) => res.json())
       .then((user) => {
         setUserName(user.display_name);
@@ -45,7 +45,7 @@ function Home() {
       .split(',')
       .map((word) => word.trim())
       .join('&');
-    fetch(`http://localhost:/api/${locationString}`)
+    fetch(`/api/${locationString}`)
       .then((data) => data.json())
       .then((response) => {
         setCurrent(response);
@@ -60,7 +60,7 @@ function Home() {
     const country = values[2];
     const userEmail = values[0];
     fetch(
-      `http://localhost:3000/api/toggleFav/${city}&${country}&${userEmail}`,
+      `/api/toggleFav/${city}&${country}&${userEmail}`,
       {
         method: 'POST',
       },
