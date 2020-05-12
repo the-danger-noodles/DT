@@ -6,7 +6,7 @@ function Favorites(props) {
   // props.favorites(array of cities)   props.setCurrent(function to change current)
   if (props.favorites.length === 0) return(<div id="favorites">You don't have any favorites yet</div>)
   const arrayOfCities = [];
-  console.log(props.favorites);
+  // console.log('Favorites on the props: ', props.favorites);
   props.favorites.forEach((city, index) => {
     arrayOfCities.push(
       <City
