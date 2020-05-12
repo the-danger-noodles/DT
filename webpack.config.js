@@ -32,7 +32,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'src/index.html',
+      template: 'index.html',
     }),
   ],
   devServer: {
@@ -40,11 +40,14 @@ module.exports = {
     // contentBase: path.join(__dirname, 'dist'),
     publicPath: '/build/',
     proxy: {
+      '/verify': {
+        target: 'http://localhost:3000',
+      },
       '/api': {
-        target: 'http://localhost:3000/api',
+        target: 'http://localhost:3000',
       },
       '/authorize': {
-        target: 'http://localhost:3000/authorize',
+        target: 'http://localhost:3000',
       },
     },
     

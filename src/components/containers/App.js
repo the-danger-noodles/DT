@@ -29,7 +29,7 @@ function App() {
         <Route exact path="/home">
           <Home />
         </Route>
-        <Route>100 * 4 + 4 = ? That's right. Not found.</Route>
+        {/* <Route>100 * 4 + 4 = ? That's right. Not found.</Route> */}
       </Switch>
     </div>
   );
