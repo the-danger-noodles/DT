@@ -20,14 +20,14 @@ userController.authorize = (req, res, next) => {
   // AFTER AUTH CODE HAS BEEN RECEIVED:
   // make a post request to https://accounts.spotify.com/api/token
   // body contains the following parameters encoded in application/x-www-form-urlencoded:
-    // client_id
-    // cient_secret
-    // grant_type: "authorization_code"
-    // code: authorization code returned from initial request
-    // redirect_uri: redirect_uri supplied when requesting code
+  // client_id
+  // cient_secret
+  // grant_type: "authorization_code"
+  // code: authorization code returned from initial request
+  // redirect_uri: redirect_uri supplied when requesting code
   // header should specify content type as 'application/x-www-form-urlencoded'
   // on success, spotify's response body will contain the following properties:
-    // access_token, token_type, scope, expires_in, refresh_token
+  // access_token, token_type, scope, expires_in, refresh_token
 
   superagent
     .post('https://accounts.spotify.com/api/token')
@@ -51,12 +51,12 @@ userController.authenticate = (req, res, next) => {
   //* can also contain an optional 'state' parameter */
   res.redirect(
     `${
-      'https://accounts.spotify.com/authorize'
-      + '?response_type=code'
-      + '&client_id='
+      'https://accounts.spotify.com/authorize' +
+      '?response_type=code' +
+      '&client_id='
     }${client_id}${
       scopes ? `&scope=${encodeURIComponent(scopes)}` : ''
-    }&redirect_uri=${encodeURIComponent(redirect_uri)}`,
+    }&redirect_uri=${encodeURIComponent(redirect_uri)}`
   );
   // on spotify login page, user is asked to accept or deny terms of scope
   // if accepted, response query string contains authorization code
@@ -99,6 +99,6 @@ userController.getUserData = (req, res, next) => {
 // body must contain grant_type and refresh_token encoded in application/x-www-form-urlencoded
 // header must contain following parameter:
 // Authorization: Basic <base64 encoded client_id:client_secret>
-  // * alternatively, the client id and secret could be sent in request body as in authorize
+// * alternatively, the client id and secret could be sent in request body as in authorize
 
 module.exports = userController;

@@ -4,7 +4,8 @@ import City from '../display/City';
 
 function Favorites(props) {
   // props.favorites(array of cities)   props.setCurrent(function to change current)
-  if (props.favorites.length === 0) return(<div id="favorites">You don't have any favorites yet</div>)
+  if (props.favorites.length === 0)
+    return <div id="favorites">You don't have any favorites yet</div>;
   const arrayOfCities = [];
   // console.log('Favorites on the props: ', props.favorites);
   props.favorites.forEach((city, index) => {
@@ -15,7 +16,7 @@ function Favorites(props) {
         key={`city` + index}
         name={city}
         locationString={props.cityCountrySearch}
-      />,
+      />
     );
   });
 

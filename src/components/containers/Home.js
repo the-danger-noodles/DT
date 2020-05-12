@@ -63,7 +63,7 @@ function Home() {
       `http://localhost:8080/api/toggleFav/${city}&${country}&${userEmail}`,
       {
         method: 'POST',
-      },
+      }
     )
       .then((data) => data.json())
       .then((updatedFavs) => {
@@ -107,12 +107,11 @@ function Home() {
   return (
     <div id="main">
       <div id="leftColumn">
+        z
         <div className="welcoming">
           {' '}
           <br />
-          Welcome,
-          {username}
-          !
+          Welcome {username} !
           <br />
           <br />{' '}
         </div>
