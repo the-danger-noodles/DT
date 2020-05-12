@@ -45,11 +45,7 @@ function Home() {
       .split(',')
       .map((word) => word.trim())
       .join('&');
-<<<<<<< HEAD
-    fetch(`http://localhost:3000/api/${locationString}`)
-=======
     fetch(`/api/${locationString}`)
->>>>>>> 64fc6484dcd9b7a863371fbc638d082886735776
       .then((data) => data.json())
       .then((response) => {
         setCurrent(response);
@@ -63,12 +59,9 @@ function Home() {
     const city = values[1];
     const country = values[2];
     const userEmail = values[0];
-    fetch(
-      `/api/toggleFav/${city}&${country}&${userEmail}`,
-      {
-        method: 'POST',
-      }
-    )
+    fetch(`/api/toggleFav/${city}&${country}&${userEmail}`, {
+      method: 'POST',
+    })
       .then((data) => data.json())
       .then((updatedFavs) => {
         setFavorites(updatedFavs);
@@ -111,7 +104,6 @@ function Home() {
   return (
     <div id="main">
       <div id="leftColumn">
-        z
         <div className="welcoming">
           {' '}
           <br />
