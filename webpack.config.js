@@ -40,12 +40,12 @@ module.exports = {
     // contentBase: path.join(__dirname, 'dist'),
     publicPath: '/build/',
     proxy: {
-      '/': {
-        target: 'http://localhost:3000/',
-      },
       '/api': {
         target: 'http://localhost:3000/api',
-      }
+      },
+      '/authorize': {
+        target: 'http://localhost:3000/authorize',
+      },
     },
     
     // proxy: [{
