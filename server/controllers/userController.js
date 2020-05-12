@@ -4,12 +4,7 @@ const superagent = require('superagent');
 const { client_id, client_secret } = require('../secrets/secrets.js');
 
 // url that spotify will redirect to upon authentication
-let redirect_uri;
-if (process.env.NODE_ENV === 'production') {
-  redirect_uri = 'http://localhost:3000/authorize';
-} else {
-  redirect_uri = 'http://localhost:8080/authorize';
-}
+let redirect_uri = 'http://localhost:3000/authorize';
 
 const userController = {};
 
