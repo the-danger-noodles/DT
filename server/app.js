@@ -13,6 +13,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// WEBPACK BUILD
+app.use("/build", express.static(path.resolve(__dirname, "../build")));
+
 app.get('/verify', userController.authenticate, (req, res) => {
   res.status(200).redirect('/authorize');
 });
@@ -32,7 +35,7 @@ app.get(
   (req, res) =>
     res
       .status(200)
-      .sendFile(path.resolve(__dirname, '..', 'dist', 'index.html')),
+      .sendFile(path.resolve(__dirname, '..', 'src', 'index.html')),
 );
 
 app.get(
@@ -69,16 +72,20 @@ app.get(
   (req, res) => res.status(200).send(res.locals.user),
 );
 
-app.use(
-  '/',
-  express.static('./dist', {
-    index: 'index.html',
-  }),
-);
 
-// catch-all route handler for any requests to an unknown route
+console.log('This is our node env ', process.env.NODE_ENV);
+if (process.env.NODE_ENV === "production") {
+  // statically serve everything in the build folder on the route '/build'
+  app.use("/build", express.static(path.join(__dirname, "../build")));
+  // serve index.html on the route '/'
+  app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "../src/index.html"));
+  });
+}
+
+// // catch-all route handler for any requests to an unknown route
 app.all('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '..', 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, "../src/index.html"));
 });
 
 // global error handler

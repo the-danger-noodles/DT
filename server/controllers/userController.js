@@ -4,7 +4,12 @@ const superagent = require('superagent');
 const { client_id, client_secret } = require('../secrets/secrets.js');
 
 // url that spotify will redirect to upon authentication
-const redirect_uri = 'http://localhost:8080/authorize';
+let redirect_uri;
+if (process.env.NODE_ENV === 'production') {
+  redirect_uri = 'http://localhost:3000/authorize';
+} else {
+  redirect_uri = 'http://localhost:8080/authorize';
+}
 
 const userController = {};
 
@@ -29,6 +34,7 @@ userController.authorize = (req, res, next) => {
   // on success, spotify's response body will contain the following properties:
   // access_token, token_type, scope, expires_in, refresh_token
 
+  // access_token, token_type, scope, expires_in, refresh_token
   superagent
     .post('https://accounts.spotify.com/api/token')
     .send(reqbody)
