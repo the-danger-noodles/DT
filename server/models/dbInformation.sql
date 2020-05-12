@@ -12,6 +12,12 @@ ___|_______________|__________
    |               |
 */
 
+CREATE TABLE users (
+   id             uuid           PRIMARY KEY DEFAULT uuid_generate_v4(),
+   spotify_email  varchar(256)   UNIQUE NOT NULL                       ,
+   username       varchar(256)   NOT NULL
+);
+
 -- 'countries' table:
 
 -- country_name and alpha_2_code must be unique, not null
@@ -24,6 +30,13 @@ ___|______________|______________|________________
    |              |              |
 */
 
+CREATE TABLE countries (
+   id             uuid           PRIMARY KEY DEFAULT uuid_generate_v4(),
+   alpha_2_code   varchar(2)     UNIQUE NOT NULL                       ,
+   country_name   varchar(64)    UNIQUE NOT NULL                       ,
+   alternate_name varchar(64)    
+);
+
 
 -- 'cities' table:
 
@@ -34,6 +47,12 @@ ___|___________|______________
    |           |
    |           |
 */
+CREATE TABLE cities (
+   id          uuid           PRIMARY KEY DEFAULT uuid_generate_v4(),
+   city_name   varchar(256)   NOT NULL                              ,
+   country_id  uuid           NOT NULL
+);
+
 
 -- 'countries_cities_users' table:
 
@@ -46,3 +65,9 @@ ___|_________|___________|________________
    |         |           |
    |         |           |
 */
+CREATE TABLE countries_cities_users (
+   id          uuid  PRIMARY KEY DEFAULT uuid_generate_v4(),
+   user_id     uuid  NOT NULL                              ,
+   city_id     uuid  NOT NULL                              ,
+   country_id  uuid  NOT NULL
+);
