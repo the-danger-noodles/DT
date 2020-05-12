@@ -35,7 +35,7 @@ app.get(
   (req, res) =>
     res
       .status(200)
-      .sendFile(path.resolve(__dirname, '..', 'src', 'index.html')),
+      .sendFile(path.resolve(__dirname, '..', 'index.html')),
 );
 
 app.get(
@@ -79,14 +79,14 @@ if (process.env.NODE_ENV === "production") {
   app.use("/build", express.static(path.join(__dirname, "../build")));
   // serve index.html on the route '/'
   app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../src/index.html"));
+    res.sendFile(path.join(__dirname, "../index.html"));
   });
 }
 
 // // catch-all route handler for any requests to an unknown route
-app.all('*', (req, res) => {
-  res.sendFile(path.join(__dirname, "../src/index.html"));
-});
+// app.all('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, "../index.html"));
+// });
 
 // global error handler
 app.use((err, req, res, next) => {
