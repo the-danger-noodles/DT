@@ -10,10 +10,12 @@ body {
 
 #main {
   margin: auto;
+  min-width: 600px;
 }
 
 #searchForm {
   margin: 15px auto;
+  min-width: 400px;
   border: solid 1px grey;
   box-shadow: 1px 1px 10px grey;
   background-color: rgb(66, 65, 52);
@@ -23,9 +25,12 @@ body {
 }
 
 #locName {
-  font-size: 4rem;
+  font-size: 4vw;
 }
 
+li {
+  list-style: none;
+}
 a {
   text-decoration: none;
   color: white;
@@ -33,8 +38,17 @@ a {
 a:hover {
   font-weight: 700;
 }
-
+img {
+  max-width: 400px;
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
 h2 {
+  text-align: center;
+}
+
+#window > a {
   text-align: center;
 }
 input {
@@ -77,12 +91,12 @@ input:focus {
   align-items: center;
   font-size: 2rem;
   text-align: center;
-  margin: 5px;
+  margin: 10px;
   border: solid 1px grey;
   border-radius: 10px;
-  box-shadow: 5px 5px 5px rgb(77, 77, 77);
-  height: 100px;
   width: 100%;
+  min-width: 250px;
+  max-width: 400px;
   background-color: rgb(66, 65, 52);
 }
 .cityCard:hover {
@@ -108,6 +122,7 @@ input:focus {
   padding: 10px;
   margin: 15px auto;
   width: 90%;
+  min-height: 500px;
   border: solid 1px grey;
   border-radius: 10px;
   box-shadow: 1px 1px 10px grey;
@@ -115,9 +130,11 @@ input:focus {
   width: 60%;
 }
 #navBox {
+  color: black;
   display: flex;
-  min-width: 150px;
-  padding-left: 25px;
+  padding: 5%;
+  min-width: 100px;
+  border-right: black 1px solid;
   flex-direction: column;
 }
 #navBox > li {
@@ -126,12 +143,18 @@ input:focus {
 }
 
 #contentBox {
+  display: flex;
+  flex: 1;
+  flex-shrink: 1;
+  align-items: center;
+  justify-content: center;
   width: 100%;
+  padding-left: 20px;
 }
 
 .weather-text {
   color: white;
-  font-size: 20px;
+  font-size: 2vw;
   font-family: 'Rubik', sans-serif;
 }
 #weather-texts {
@@ -175,8 +198,40 @@ input:focus {
 }
 #searchBar {
   width: 100%;
+  min-width: 600px;
 }
 form {
   display: flex;
   flex-direction: column;
+}
+
+@media (max-width: 900px) {
+  .welcoming {
+    position: relative;
+    max-width: 300px;
+    margin: auto;
+    background: none;
+    border: none;
+    color: rgb(92, 8, 8);
+    box-shadow: none;
+  }
+  #switchContainer {
+    flex-direction: column;
+  }
+  #navBox {
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 0px;
+    border-right: none;
+    border-bottom: black 1px solid;
+  }
+  #contentBox {
+    padding: 0;
+  }
+  .weather-text {
+    font-size: 18px;
+  }
+  #locName {
+    font-size: 24px;
+  }
 }

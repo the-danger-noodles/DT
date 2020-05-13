@@ -79,8 +79,8 @@ function Home() {
       <div>
         <div>
           <Search grabLocationData={grabLocationData} />
-          <div className="welcoming">Welcome, {username}!</div>
         </div>
+        <div className="welcoming">Welcome, {username}!</div>
         <div>
           <Favorites
             favorites={favorites}
@@ -94,9 +94,9 @@ function Home() {
 
   return (
     <div id="main">
-      <div className="welcoming">Welcome {username}!</div>
-
       <Search grabLocationData={grabLocationData} />
+
+      <div className="welcoming">Welcome {username}!</div>
 
       <Weather
         query={query}
