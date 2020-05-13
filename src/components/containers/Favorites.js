@@ -23,7 +23,7 @@ function Favorites(props) {
   return (
     <div>
       <h2>Your Favorites</h2>
-      <div id="favorites">{arrayOfCities}</div>;
+      <div id="favorites">{arrayOfCities}</div>
     </div>
   );
 }
