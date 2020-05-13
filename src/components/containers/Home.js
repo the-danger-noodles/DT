@@ -7,14 +7,15 @@ import { FontAwesomeIcon as FAIcon } from '@fortawesome/react-fontawesome';
 import { faStar as regStar } from '@fortawesome/free-regular-svg-icons';
 import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
 
-import Spotify from './Spotify';
 import Weather from './Weather';
-import Window from './Window';
 import Search from './Search';
+import SwitchContainer from './SwitchContainer';
 
 import Favorites from './Favorites';
+// import { ProgressPlugin } from 'webpack';
 
 function Home() {
+  // const useHistory =
   const [current, setCurrent] = useState({});
   //current is the bigAssObject we receive from "grabLocationData" that feeds most of the components with data
   const [username, setUserName] = useState('');
@@ -51,6 +52,8 @@ function Home() {
       .then((response) => {
         setCurrent(response);
         setQuery(email + ', ' + response.userQuery);
+        // const destUrl = `/home/${response.userQuery}`;
+        // history.push(destUrl);
       });
   };
   //toggle fav doesnt toggle, only adds fav, there is no way to remove it, sorry guys, we had no time:(
@@ -74,12 +77,11 @@ function Home() {
     //there is no current - render only these..
     return (
       <div>
-        <div id="leftColumn">
+        <div>
           <Search grabLocationData={grabLocationData} />
           <div className="welcoming">Welcome, {username}!</div>
         </div>
-        <div id="middleColumn"></div>
-        <div className="rightColumn">
+        <div>
           <Favorites
             favorites={favorites}
             grabLocationData={grabLocationData}
@@ -89,18 +91,6 @@ function Home() {
       </div>
     );
   }
-  const FavIcon = (
-    <span className="favIcon">
-      <FAIcon
-        onClick={() => {
-          toggleFav(query);
-        }}
-        size="2x"
-        icon={regStar}
-        style={{ color: 'rgb(66, 65, 52)' }}
-      />
-    </span>
-  );
 
   return (
     <div id="main">
@@ -108,42 +98,18 @@ function Home() {
 
       <Search grabLocationData={grabLocationData} />
 
-      <Weather location={query} weather={current.weatherData} />
+      <Weather
+        query={query}
+        weather={current.weatherData}
+        toggleFav={toggleFav}
+      />
 
-      <Router>
-        <div>
-          <li>
-            <Link to="/Window">Country Info</Link>
-          </li>
-          <li>
-            <Link to="/Spotify">Spotify</Link>
-          </li>
-          <li>
-            <Link to="/Favorites">Favorites</Link>
-          </li>
-
-          <Switch>
-            <Route exact path="/Spotify">
-              <Spotify songs={current.trackList} />
-            </Route>
-            <Route exact path="/Window">
-              <Window country={current.countryData} />
-            </Route>
-            <Route exact path="/Favorites">
-              <Favorites
-                favorites={favorites}
-                grabLocationData={grabLocationData}
-                setCurrent={setCurrent}
-              />
-            </Route>
-            <Route path="*">
-              <Spotify songs={current.trackList} />
-            </Route>
-          </Switch>
-        </div>
-      </Router>
-
-      <div id="favIcon">{FavIcon}</div>
+      <SwitchContainer
+        current={current}
+        favorites={favorites}
+        grabLocationData={grabLocationData}
+        setCurrent={setCurrent}
+      />
     </div>
   );
 }

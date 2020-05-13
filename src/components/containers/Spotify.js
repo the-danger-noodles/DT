@@ -19,11 +19,16 @@ function Spotify(props) {
         <a target="blank" href={props.songs[i].url}>
           Listen
         </a>
-      </div>,
+      </div>
     );
   }
 
-  return <div id="spotify">{arrayOfSongs}</div>;
+  return (
+    <div>
+      <h2>Spotify Top Chart</h2>
+      <div id="spotify">{arrayOfSongs}</div>;
+    </div>
+  );
 }
 
 export default Spotify;

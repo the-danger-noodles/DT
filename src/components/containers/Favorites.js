@@ -20,7 +20,12 @@ function Favorites(props) {
     );
   });
 
-  return <div id="favorites">{arrayOfCities}</div>;
+  return (
+    <div>
+      <h2>Your Favorites</h2>
+      <div id="favorites">{arrayOfCities}</div>;
+    </div>
+  );
 }
 
 export default Favorites;

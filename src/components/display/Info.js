@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 function Info(props) {
   const languages = [];
   props.countryData.languages.forEach((language, index) =>
-    languages.push(<li key={'language' + index}>{language}</li>),
+    languages.push(<li key={'language' + index}>{language}</li>)
   );
 
   return (
@@ -16,10 +16,7 @@ function Info(props) {
         <li>Area: {props.countryData.area} km²</li>
         <li>Population: {props.countryData.population}</li>
       </ul>
-      <ul>
-        Languages:
-        {languages}
-      </ul>
+      <ul>Languages: {languages}</ul>
     </div>
   );
 }

@@ -17,7 +17,6 @@ body {
   border: solid 1px grey;
   box-shadow: 1px 1px 10px grey;
   background-color: rgb(66, 65, 52);
-  opacity: 75%;
   border-radius: 10px;
   width: 40%;
   padding: 10px;
@@ -26,8 +25,17 @@ body {
 #locName {
   font-size: 4rem;
 }
+
 a {
+  text-decoration: none;
   color: white;
+}
+a:hover {
+  font-weight: 700;
+}
+
+h2 {
+  text-align: center;
 }
 input {
   border-radius: 5px;
@@ -42,10 +50,13 @@ input:focus {
 }
 #favorites {
   margin: 15px auto;
-  width: 60%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+.cityCard:hover {
+  background: gray;
 }
 .welcoming {
   position: absolute;
@@ -56,7 +67,6 @@ input:focus {
   border: solid 1px grey;
   box-shadow: 1px 1px 10px grey;
   background-color: rgb(66, 65, 52);
-  opacity: 75%;
   border-radius: 10px;
   padding: 10px;
 }
@@ -70,17 +80,16 @@ input:focus {
   margin: 5px;
   border: solid 1px grey;
   border-radius: 10px;
-  box-shadow: 1px 1px 10px grey;
+  box-shadow: 5px 5px 5px rgb(77, 77, 77);
   height: 100px;
   width: 100%;
   background-color: rgb(66, 65, 52);
-  opacity: 75%;
 }
 .cityCard:hover {
   cursor: pointer;
 }
+
 #weather {
-  opacity: 75%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -93,16 +102,33 @@ input:focus {
   width: 75%;
   padding: 10px;
 }
-#window {
+#switchContainer {
+  display: flex;
+  flex-direction: row;
   padding: 10px;
-  opacity: 75%;
   margin: 15px auto;
+  width: 90%;
   border: solid 1px grey;
   border-radius: 10px;
   box-shadow: 1px 1px 10px grey;
   background-color: rgb(66, 65, 52);
   width: 60%;
 }
+#navBox {
+  display: flex;
+  min-width: 150px;
+  padding-left: 25px;
+  flex-direction: column;
+}
+#navBox > li {
+  list-style: none;
+  line-height: 2rem;
+}
+
+#contentBox {
+  width: 100%;
+}
+
 .weather-text {
   color: white;
   font-size: 20px;
@@ -117,22 +143,22 @@ input:focus {
   color: black;
 }
 #spotify {
-  opacity: 75%;
   border-radius: 10px;
-  margin: 15px auto;
-  border: solid 1px grey;
-  box-shadow: 1px 1px 10px grey;
-  width: 60%;
-  padding: 10px;
-  background-color: rgb(66, 65, 52);
+  width: 100%;
 }
+
 #spotifyLogin {
   margin-top: 20%;
 }
+
 #favIcon {
-  align-self: flex-end;
-  padding-right: 20%;
+  display: absolute;
+  align-self: flex-start;
+  justify-self: flex-end;
+  top: 0;
+  right: 0;
 }
+
 .song {
   display: flex;
   flex-direction: column;
