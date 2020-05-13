@@ -2,18 +2,20 @@
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { FontAwesomeIcon as FAIcon } from '@fortawesome/react-fontawesome';
 import { faStar as regStar } from '@fortawesome/free-regular-svg-icons';
 import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
 
-import Spotify from './Spotify';
 import Weather from './Weather';
-import Window from './Window';
 import Search from './Search';
+import SwitchContainer from './SwitchContainer';
 
 import Favorites from './Favorites';
+// import { ProgressPlugin } from 'webpack';
 
 function Home() {
+  // const useHistory =
   const [current, setCurrent] = useState({});
   //current is the bigAssObject we receive from "grabLocationData" that feeds most of the components with data
   const [username, setUserName] = useState('');
@@ -50,6 +52,8 @@ function Home() {
       .then((response) => {
         setCurrent(response);
         setQuery(email + ', ' + response.userQuery);
+        // const destUrl = `/home/${response.userQuery}`;
+        // history.push(destUrl);
       });
   };
   //toggle fav doesnt toggle, only adds fav, there is no way to remove it, sorry guys, we had no time:(
@@ -59,12 +63,9 @@ function Home() {
     const city = values[1];
     const country = values[2];
     const userEmail = values[0];
-    fetch(
-      `/api/toggleFav/${city}&${country}&${userEmail}`,
-      {
-        method: 'POST',
-      },
-    )
+    fetch(`/api/toggleFav/${city}&${country}&${userEmail}`, {
+      method: 'POST',
+    })
       .then((data) => data.json())
       .then((updatedFavs) => {
         setFavorites(updatedFavs);
@@ -76,12 +77,11 @@ function Home() {
     //there is no current - render only these..
     return (
       <div>
-        <div id="leftColumn">
+        <div>
           <Search grabLocationData={grabLocationData} />
           <div className="welcoming">Welcome, {username}!</div>
         </div>
-        <div id="middleColumn"></div>
-        <div className="rightColumn">
+        <div>
           <Favorites
             favorites={favorites}
             grabLocationData={grabLocationData}
@@ -91,48 +91,25 @@ function Home() {
       </div>
     );
   }
-  const FavIcon = (
-    <span className="favIcon">
-      <FAIcon
-        onClick={() => {
-          toggleFav(query);
-        }}
-        size="2x"
-        icon={regStar}
-        style={{ color: 'rgb(66, 65, 52)' }}
-      />
-    </span>
-  );
 
   return (
     <div id="main">
-      <div id="leftColumn">
-        <div className="welcoming">
-          {' '}
-          <br />
-          Welcome,
-          {username}
-          !
-          <br />
-          <br />{' '}
-        </div>
-        <Weather weather={current.weatherData} />
-        <Spotify songs={current.trackList} />
-      </div>
-      <div id="middleColumn">
-        <Search grabLocationData={grabLocationData} />
+      <div className="welcoming">Welcome {username}!</div>
 
-        <div id="favIcon">{FavIcon}</div>
+      <Search grabLocationData={grabLocationData} />
 
-        <Window country={current.countryData} />
-      </div>
-      <div id="rightColumn">
-        <Favorites
-          favorites={favorites}
-          grabLocationData={grabLocationData}
-          setCurrent={setCurrent}
-        />
-      </div>
+      <Weather
+        query={query}
+        weather={current.weatherData}
+        toggleFav={toggleFav}
+      />
+
+      <SwitchContainer
+        current={current}
+        favorites={favorites}
+        grabLocationData={grabLocationData}
+        setCurrent={setCurrent}
+      />
     </div>
   );
 }

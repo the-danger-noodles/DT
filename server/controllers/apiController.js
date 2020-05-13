@@ -114,7 +114,7 @@ apiController.getSpotifyData = (req, res, next) => {
     .then((data) => {
       // get tracks href of top 50 regional playlist
       const tracksURL = data.playlists.items.find(
-        (playlist) => playlist.name === `${country} Top 50`,
+        (playlist) => playlist.name === `${country} Top 50`
       ).tracks.href;
 
       // fetch track list of regional top 50
