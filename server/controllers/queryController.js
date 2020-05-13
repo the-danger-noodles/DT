@@ -57,12 +57,11 @@ queryController.createOrFindUser = (req, res, next) => {
 
 // Add a new favourite city to database
 queryController.addFav = (req, res, next) => {
-  console.log(req.params);
   const { email } = req.params;
   const { city } = req.params;
   const { country } = req.params;
   const reqParams = [email, city, country];
-  console.log(reqParams);
+  console.log(country);
 
   // check cities table to see if any rows are returned with this city name
   const checkCityQuery = 'SELECT id FROM cities WHERE city_name = $1';
