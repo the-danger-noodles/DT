@@ -57,17 +57,15 @@ function Weather(props) {
   return (
     <div style={style} id="weather">
       <div id="weather-texts">
-        <span className="weather-text">
-          {Math.round(props.weather.temp)} °C {<br></br>}
-        </span>
-        <span className="weather-text">
-          {props.weather.weather === 'Clear' ? 'Clear' : props.weather.weather}{' '}
-          {<br></br>}
-        </span>
-        <span className="weather-text">
-          Wind: {Math.round(props.weather.windSpeed)} km/h {<br></br>}
-        </span>{' '}
+        <div className="weather-text">{Math.round(props.weather.temp)} °C</div>
+        <div className="weather-text">
+          {props.weather.weather === 'Clear' ? 'Clear' : props.weather.weather}
+        </div>
+        <div className="weather-text">
+          Wind: {Math.round(props.weather.windSpeed)} km/h
+        </div>
       </div>
+      <div id="locName">{props.location.split(',').slice(1, 2)}</div>
       <div>
         <FAIcon
           onClick={() => favClicked(id)}

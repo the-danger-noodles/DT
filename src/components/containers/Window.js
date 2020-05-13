@@ -10,8 +10,9 @@ function Window(props) {
   // props.country={current.countryData} props.addFavorite={setFavorites} />
   return (
     <div id="window">
+      <div>Country Info</div>
       <div>{props.country.name}</div>
-      <img width="100%" height="200" src={props.country.flag} />
+      <img height="200" src={props.country.flag} />
       <Info countryData={props.country} />
       <a id="wiki" href={`https://en.wikipedia.org/wiki/${props.country.name}`}>
         Read more on wiki!

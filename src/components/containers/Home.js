@@ -2,6 +2,7 @@
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { FontAwesomeIcon as FAIcon } from '@fortawesome/react-fontawesome';
 import { faStar as regStar } from '@fortawesome/free-regular-svg-icons';
 import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
@@ -103,31 +104,46 @@ function Home() {
 
   return (
     <div id="main">
-      <div id="leftColumn">
-        <div className="welcoming">
-          {' '}
-          <br />
-          Welcome {username} !
-          <br />
-          <br />{' '}
+      <div className="welcoming">Welcome {username}!</div>
+
+      <Search grabLocationData={grabLocationData} />
+
+      <Weather location={query} weather={current.weatherData} />
+
+      <Router>
+        <div>
+          <li>
+            <Link to="/Window">Country Info</Link>
+          </li>
+          <li>
+            <Link to="/Spotify">Spotify</Link>
+          </li>
+          <li>
+            <Link to="/Favorites">Favorites</Link>
+          </li>
+
+          <Switch>
+            <Route exact path="/Spotify">
+              <Spotify songs={current.trackList} />
+            </Route>
+            <Route exact path="/Window">
+              <Window country={current.countryData} />
+            </Route>
+            <Route exact path="/Favorites">
+              <Favorites
+                favorites={favorites}
+                grabLocationData={grabLocationData}
+                setCurrent={setCurrent}
+              />
+            </Route>
+            <Route path="*">
+              <Spotify songs={current.trackList} />
+            </Route>
+          </Switch>
         </div>
-        <Weather weather={current.weatherData} />
-        <Spotify songs={current.trackList} />
-      </div>
-      <div id="middleColumn">
-        <Search grabLocationData={grabLocationData} />
+      </Router>
 
-        <div id="favIcon">{FavIcon}</div>
-
-        <Window country={current.countryData} />
-      </div>
-      <div id="rightColumn">
-        <Favorites
-          favorites={favorites}
-          grabLocationData={grabLocationData}
-          setCurrent={setCurrent}
-        />
-      </div>
+      <div id="favIcon">{FavIcon}</div>
     </div>
   );
 }
