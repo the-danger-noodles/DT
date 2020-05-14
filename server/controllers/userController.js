@@ -57,6 +57,7 @@ userController.toggleFav = async (req, res, next) => {
   }
 };
 
+
 userController.getFavs = async (req, res, next) => {
   const user_id = res.locals.user.id;
   const { rows } = await db.query(`

@@ -1,3 +1,10 @@
 /node_modules
 /server/secrets
+<<<<<<< HEAD
+search-test.html
+.gitignore
+/src/components/containers/Child.js
+Routes.js
+=======
 /build
+>>>>>>> 335c6dfc83e180388b14f0919fc5d9905fcce7ac
