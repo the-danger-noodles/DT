@@ -71,13 +71,11 @@ userController.getFavs = async (req, res, next) => {
   }
 
   const { rows } = await db.query(`
-    SELECT locations.city, locations.country FROM favorites 
+    SELECT locations.id AS place_id, locations.city, locations.country FROM favorites 
     INNER JOIN locations ON favorites.location_id = locations.id
     WHERE user_id = $1`, 
     [ user_id ]
   );
-
-  console.log(user_id, rows);
 
   res.locals.user.favsArray = rows;
   return next();
