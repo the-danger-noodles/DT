@@ -1,7 +1,0 @@
-/node_modules
-/server/secrets
-search-test.html
-.gitignore
-/src/components/containers/Child.js
-Routes.js
-/build
