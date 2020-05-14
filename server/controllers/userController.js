@@ -3,7 +3,10 @@ const db = require('../models/dbModels');
 const userController = { };
 
 /*
-  
+  If the client has authenticated, retrieves any user information 
+  stored in the database and adds it to res.locals.user. Otherwise, 
+  returns an error. If no entry exists for that user in the database,
+  a new one will be created.
 */
 userController.getAuthUser = async (req, res, next) => {
   const { spotify_email, username } = res.locals.user;
@@ -61,7 +64,6 @@ userController.toggleFav = async (req, res, next) => {
 };
 
 userController.getFavs = async (req, res, next) => {
-  console.log("in get favs")
   const user_id = res.locals.user.id;
 
   if (!user_id) {
