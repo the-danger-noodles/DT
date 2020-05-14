@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const querystring = require('querystring');
 const db = require('../models/dbModels');
 
-const { weather_api_key } = require('../secrets/secrets.js');
+const { weather_api_key, google_api } = require('../secrets/secrets.js');
 
 const apiController = {};
 
@@ -17,7 +17,12 @@ apiController.getLocationData = async (req, res, next) => {
   let city, countryCode;
 
   if (!rows.length) {
-    city = "New York", countryCode = "US"; //get at least this info from the google api 
+
+    const { result } = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${id}&key=${google_api}`)
+      .then(response => response.json());
+
+    city = result.name;
+    countryCode = result.address_components.pop().short_name;
 
     await db.query(`
       INSERT INTO locations (city, country) VALUES($1, $2)`, 
