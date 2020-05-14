@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
-export default function CountryRedirect({ component: Component, defaultCountry: defaultCountry, ...rest }) {
+export default function CityRedirect({ component: Component, defaultCity: defaultCity, ...rest }) {
   return (
     <Route
       {...rest}
@@ -9,7 +9,7 @@ export default function CountryRedirect({ component: Component, defaultCountry: 
         return (
           <Redirect
             to={{
-              pathname: `/${defaultCountry.name}`,
+              pathname: `/${defaultCity.name}`,
               state: {
                 from: props.location,
               },
