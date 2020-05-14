@@ -4,6 +4,7 @@ const userController = { };
 
 // Add user to database
 userController.getUser = async (req, res, next) => {
+  console.log("In get user")
   const { spotify_email, username } = res.locals.user;
 
   if (spotify_email && username) {
@@ -59,6 +60,7 @@ userController.toggleFav = async (req, res, next) => {
 
 
 userController.getFavs = async (req, res, next) => {
+  console.log("in get favs")
   const user_id = res.locals.user.id;
   const { rows } = await db.query(`
     SELECT locations.city, locations.country FROM favorites 

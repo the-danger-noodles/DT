@@ -10,7 +10,7 @@ router.use('/', authController.verify);
 router.get('/me', 
   userController.getUser,
   userController.getFavs,
-  (req, res) => res.status(200).send(res.locals.user));
+  (req, res) => res.status(200).json(res.locals.user));
 
 router.put('/me/favorite/:location_id', 
   userController.getUser,
