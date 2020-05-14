@@ -1,19 +1,18 @@
-const fetch = require('node-fetch');
-const superagent = require('superagent');
-// client_id and client_secret stored in server/secrets/secrets.js
-const { client_id, client_secret } = require('../secrets/secrets.js');
+const db = require('../models/dbModels');
 
-// url that spotify will redirect to upon authentication
-let redirect_uri;
-if (process.env.NODE_ENV === 'production') {
-  redirect_uri = 'http://localhost:3000/authorize';
-} else {
-  redirect_uri = 'http://localhost:8080/authorize';
-}
+const userController = { };
 
+// Add user to database
+userController.getUser = async (req, res, next) => {
+  const { spotify_email, username } = res.locals.user;
 
-const userController = {};
+  if (spotify_email && username) {
+    let data = await db.query(`
+      SELECT * FROM users WHERE spotify_email = $1`, 
+      [ spotify_email ]
+    );
 
+<<<<<<< HEAD
 // posts a request to spotify to get an authorization token
 userController.authorize = (req, res, next) => {
   const reqbody = {
@@ -69,37 +68,54 @@ userController.authenticate = (req, res, next) => {
   // if accepted, response query string contains authorization code
   // if denied, query string contains error
   // *query string will also contain value of 'state' if one was provided in params
+=======
+    if (!data.rows.length) {
+      data = await db.query(`
+        INSERT INTO users (spotify_email, username) VALUES ($1, $2) RETURNING *`, 
+        [ spotify_email, username ]
+      );
+    } 
+
+    res.locals.user = data.rows[0];
+    return next();
+  } else {
+    return res.status(400).send("Bad Request");
+  }
+>>>>>>> c6afc5f30e6ff9a1f6521e51706425c858b4e5ec
 };
 
-// fetches user's profile information from spotify api
-// requires spotify access token received in authorize middleware
-userController.getUserData = (req, res, next) => {
-  // request to spotify's api with access_token from token cookie in header
-  fetch('https://api.spotify.com/v1/me', {
-    method: 'get',
-    headers: { Authorization: `Bearer ${req.cookies.token.access_token}` },
-  })
-    .then((resp) => resp.json())
-    .then((data) => {
-      // if spotify returned an error (i.e. token was invalid) redirect to login
-      if (data.error) {
-        console.log('invalid token');
-        res.redirect('/');
-      } else {
-        // save display name and email from response object
-        res.locals.user = {
-          display_name: data.display_name,
-          email: data.email,
-        };
-        return next();
+userController.toggleFav = async (req, res, next) => {
+  const { location_id } = req.params;
+  const { toggle } = req.body;
+  const user_id = res.locals.user.id;
+
+  if (user_id && location_id && toggle !== undefined) {
+    if (toggle === true) {
+      const { rows } = await db.query(`
+        SELECT * FROM favorites WHERE user_id = $1 AND location_id = $2`, 
+        [ user_id, location_id ]
+      );
+
+      if (rows.length === 0) {
+        await db.query(`
+          INSERT INTO favorites (user_id, location_id) VALUES($1, $2)`, 
+          [ user_id, location_id ]
+        );
       }
-    })
-    .catch((err) => {
-      console.log(err);
-      return next({ err: 'ERROR WITH GETTING USER DATA' });
-    });
+    } else if (toggle === false) {
+      await db.query(`
+        DELETE FROM favorites WHERE user_id = $1 AND location_id = $2`, 
+        [ user_id, location_id ]
+      );
+    }
+
+    return res.status(200).send();
+  } else {
+    return res.status(400).send("Bad Request");
+  }
 };
 
+<<<<<<< HEAD
 // REFRESHING TOKENS:
 // after tokens expire, new ones must be requested using the refresh_token property on token object
 // POST https://accounts.spotify.com/api/token
@@ -107,5 +123,18 @@ userController.getUserData = (req, res, next) => {
 // header must contain following parameter:
 // Authorization: Basic <base64 encoded client_id:client_secret>
 // * alternatively, the client id and secret could be sent in request body as in authorize
+=======
+userController.getFavs = async (req, res, next) => {
+  const user_id = res.locals.user.id;
+  const { rows } = await db.query(`
+    SELECT locations.city, locations.country FROM favorites 
+    INNER JOIN locations ON favorites.location_id = locations.id
+    WHERE user_id = $1`, 
+    [ user_id ]
+  );
+  res.locals.user.favsArray = rows;
+  return next();
+};
+>>>>>>> c6afc5f30e6ff9a1f6521e51706425c858b4e5ec
 
 module.exports = userController;
