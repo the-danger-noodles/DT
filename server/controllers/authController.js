@@ -38,6 +38,22 @@ authController.authorize = async (req, res, next) => {
 };
 
 authController.verify = (req, res, next) => { 
+  if (process.env.NODE_ENV === 'test') {
+      res.locals.user = { 
+        username: 'Test User', 
+        spotify_email: 'test@user.com' 
+      };
+      res.locals.token = {
+        "access_token": "fake_token",
+        "token_type": "Bearer",
+        "expires_in": 3600,
+        "refresh_token": "fake_token",
+        "scope": "user-read-email user-read-private",
+        "iat": Date.now()
+      };
+      return next();
+  }
+
   jwt.verify(req.cookies.token, client_secret, async (err, token) => {
     if (!err) {
       const options = {
