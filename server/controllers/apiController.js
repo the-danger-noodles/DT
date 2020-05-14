@@ -53,7 +53,6 @@ apiController.getCountryData = (req, res, next) => {
       };
       res.locals.data.countryData = countryData;
 
-      // console.log(res.locals.data);
       return next();
     })
     .catch((err) => next(`Error in getCountryData${err}`));

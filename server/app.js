@@ -45,7 +45,6 @@ app.get(
   apiController.getWeatherData,
   apiController.getSpotifyData,
   (req, res, next) => {
-    console.log(res.locals.data);
     return next();
   },
   (req, res) => res.status(200).send(res.locals.data),
@@ -73,20 +72,14 @@ app.get(
 );
 
 
-console.log('This is our node env ', process.env.NODE_ENV);
 if (process.env.NODE_ENV === "production") {
-  // statically serve everything in the build folder on the route '/build'
   app.use("/build", express.static(path.join(__dirname, "../build")));
-  // serve index.html on the route '/'
-  app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../index.html"));
+  app.get('/*', (req, res) => {
+    console.log(__dirname)
+    res.sendFile(path.join(__dirname, '../index.html'));
   });
 }
 
-// // catch-all route handler for any requests to an unknown route
-// app.all('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, "../index.html"));
-// });
 
 // global error handler
 app.use((err, req, res, next) => {
