@@ -57,7 +57,7 @@ function Weather(props) {
     <span className="favIcon">
       <FAIcon
         onClick={() => {
-          toggleFav(props.query);
+          props.toggleFav(props.query);
         }}
         size="2x"
         icon={regStar}
