@@ -40,7 +40,7 @@ authController.authorize = async (req, res, next) => {
 authController.verify = (req, res, next) => { 
   jwt.verify(req.cookies.token, client_secret, async (err, token) => {
     if (err) {
-      return res.redirect('/');
+      res.status(403).send();
     } else {
       res.locals.token = token;
     }

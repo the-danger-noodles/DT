@@ -13,7 +13,11 @@ app.use(cookieParser(), express.json(), express.urlencoded({ extended: true }));
 app.get('/', (req, res) => res.status(200).sendFile(path.resolve(__dirname, '../index.html')));
 app.use("/build", express.static(path.resolve(__dirname, "../build")));
 
+<<<<<<< HEAD
 app.get('/authorize', authController.authorize, (req, res) => res.status(200).send("Authorized"));
+=======
+app.get('/authorize', authController.authorize, (req, res) => res.redirect('/'));
+>>>>>>> 58d133acc21703c5f50ea0e0b7b60934527db71a
 
 app.use('/api', apiRouter);
 
