@@ -8,6 +8,8 @@ import { faCloudShowersHeavy as solidRain } from '@fortawesome/free-solid-svg-ic
 import { faCloud as solidCloud } from '@fortawesome/free-solid-svg-icons';
 
 import { FontAwesomeIcon as FAIcon } from '@fortawesome/react-fontawesome';
+import { faStar as regStar } from '@fortawesome/free-regular-svg-icons';
+import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
 
 function Weather(props) {
   //function to check if its day/night
@@ -51,23 +53,34 @@ function Weather(props) {
   }
   document.body.style.color = 'white';
 
+  const FavIcon = (
+    <span className="favIcon">
+      <FAIcon
+        onClick={() => {
+          props.toggleFav(props.query);
+        }}
+        size="2x"
+        icon={regStar}
+        style={{ color: 'white' }}
+      />
+    </span>
+  );
+
   const style = {
     backgroundColor: color,
   };
   return (
     <div style={style} id="weather">
       <div id="weather-texts">
-        <span className="weather-text">
-          {Math.round(props.weather.temp)} °C {<br></br>}
-        </span>
-        <span className="weather-text">
-          {props.weather.weather === 'Clear' ? 'Clear' : props.weather.weather}{' '}
-          {<br></br>}
-        </span>
-        <span className="weather-text">
-          Wind: {Math.round(props.weather.windSpeed)} km/h {<br></br>}
-        </span>{' '}
+        <div className="weather-text">{Math.round(props.weather.temp)} °C</div>
+        <div className="weather-text">
+          {props.weather.weather === 'Clear' ? 'Clear' : props.weather.weather}
+        </div>
+        <div className="weather-text">
+          Wind: {Math.round(props.weather.windSpeed)} km/h
+        </div>
       </div>
+      <div id="locName">{props.query.split(',').slice(1, 2)}</div>
       <div>
         <FAIcon
           onClick={() => favClicked(id)}
@@ -76,6 +89,7 @@ function Weather(props) {
           style={{ color: iconColor }}
         />
       </div>
+      <div id="favIcon">{FavIcon}</div>
     </div>
   );
 }

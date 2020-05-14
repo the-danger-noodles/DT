@@ -5,7 +5,7 @@ import { faSpotify as Spotify } from '@fortawesome/fontawesome-free-brands';
 import Home from './Home';
 
 function App() {
-  let FavIcon = (
+  const FavIcon = (
     <span className="favIcon">
       <FAIcon size="7x" icon={Spotify} style={{ color: 'green' }} />
     </span>
