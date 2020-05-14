@@ -1,102 +1,23 @@
+const path = require('path');
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const path = require('path');
-const apiController = require('./controllers/apiController');
-const userController = require('./controllers/userController');
-const cookieController = require('./controllers/cookieController');
-const queryController = require('./controllers/queryController');
+
+const apiRouter = require('./routers/apiRouter');
+const authController = require('./controllers/authController');
 
 const app = express();
 const port = 3000;
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(cookieParser(), express.json(), express.urlencoded({ extended: true }));
 
-// WEBPACK BUILD
+app.get('/', (req, res) => res.status(200).sendFile(path.resolve(__dirname, '../index.html')));
 app.use("/build", express.static(path.resolve(__dirname, "../build")));
 
-app.get('/verify', userController.authenticate, (req, res) => {
-  res.status(200).redirect('/authorize');
-});
+app.get('/authorize', authController.authorize, (req, res) => res.status(200).send("Authorized"));
 
-// separate authorization route to prevent spotify code from being retained in 'home' url
-app.get(
-  '/authorize',
-  userController.authorize,
-  cookieController.setCookie,
-  (req, res) => res.redirect('/home'),
-);
+app.use('/api', apiRouter);
 
-app.get(
-  '/home',
-  cookieController.checkCookie,
-  userController.getUserData,
-  (req, res) =>
-    res
-      .status(200)
-      .sendFile(path.resolve(__dirname, '..', 'index.html')),
-);
+app.use('/', (req, res) => res.status(404).send("Not Found"));
+app.use((err, req, res, next) => res.status(500).send("Internal Server Error"));
 
-app.get(
-  '/api/:city&:country',
-  apiController.setQuery,
-  apiController.getCountryData,
-  apiController.getWeatherData,
-  apiController.getSpotifyData,
-  (req, res, next) => {
-    console.log(res.locals.data);
-    return next();
-  },
-  (req, res) => res.status(200).send(res.locals.data),
-);
-
-// app.get('/api/user',
-//   userController.getUserData,
-//   (req, res) => res.status(200).send(res.locals.user));
-
-app.post(
-  '/api/toggleFav/:city&:country&:email',
-  queryController.addFav,
-  queryController.getFavs,
-  (req, res) => {
-    res.status(200).send(res.locals.user.favsArray);
-  },
-);
-
-app.get(
-  '/api/user',
-  userController.getUserData,
-  queryController.createOrFindUser,
-  queryController.getFavs,
-  (req, res) => res.status(200).send(res.locals.user),
-);
-
-
-console.log('This is our node env ', process.env.NODE_ENV);
-if (process.env.NODE_ENV === "production") {
-  // statically serve everything in the build folder on the route '/build'
-  app.use("/build", express.static(path.join(__dirname, "../build")));
-  // serve index.html on the route '/'
-  app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../index.html"));
-  });
-}
-
-// // catch-all route handler for any requests to an unknown route
-// app.all('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, "../index.html"));
-// });
-
-// global error handler
-app.use((err, req, res, next) => {
-  const defaultErr = {
-    log: 'Express error handler caught unknown middleware error',
-    status: 400,
-    message: { error: 'An error occurred' },
-  };
-  const errObj = { ...defaultErr, err };
-  res.status(errObj.status).send(errObj);
-});
-
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`listening on port ${port}...`));
