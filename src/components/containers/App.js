@@ -17,7 +17,7 @@ function App() {
           <div>
             {' '}
             <center id="spotifyLogin">
-              <a className="black" href="/verify">
+              <a className="black" href="/authorize">
                 {FavIcon}
                 <br></br>
                 <br></br>
