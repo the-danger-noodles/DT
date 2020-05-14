@@ -2,12 +2,12 @@ const fetch = require('node-fetch');
 const querystring = require('querystring');
 const db = require('../models/dbModels');
 
-const { weather_api_key } = require('../secrets/secrets.js');
+const { weather_api_key, google_api } = require('../secrets/secrets.js');
 
 const apiController = {};
 
 apiController.getLocationData = async (req, res, next) => {
-  const { id } = req.params.id;
+  const { id } = req.params;
 
   const { rows } = await db.query(`
     SELECT * FROM locations WHERE id = $1`, 
@@ -17,11 +17,22 @@ apiController.getLocationData = async (req, res, next) => {
   let city, countryCode;
 
   if (!rows.length) {
-    city = "New York", countryCode = "US"; //get at least this info from the google api 
+
+    console.log(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${id}&key=${google_api}`);
+
+    const data = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${id}&key=${google_api}`)
+      .then(response => response.json());
+
+    if (!data.result) {
+      return next("Bad Request");
+    }
+
+    city = data.result.name;
+    countryCode = data.result.address_components.pop().short_name;
 
     await db.query(`
-      INSERT INTO locations (city, country) VALUES($1, $2)`, 
-      [ city, countryCode ]
+      INSERT INTO locations (id, city, country) VALUES($1, $2, $3)`, 
+      [ id, city, countryCode ]
     );
   } else {
     city = rows[0].city;
