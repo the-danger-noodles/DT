@@ -28,9 +28,9 @@ authController.authorize = async (req, res, next) => {
       .set('Content-Type', 'application/x-www-form-urlencoded')
       .end((err, { body }) => {
         if (err) {
-          return next(err);
+          next(err);
         }
-
+        
         res.cookie('token', jwt.sign(body, client_secret));
         return next();
       });
@@ -39,29 +39,26 @@ authController.authorize = async (req, res, next) => {
 
 authController.verify = (req, res, next) => { 
   jwt.verify(req.cookies.token, client_secret, async (err, token) => {
-    if (err) {
-      res.status(403).send();
-    } else {
-      res.locals.token = token;
+    if (!err) {
+      const options = {
+        method: 'get',
+        headers: { 
+          Authorization: `Bearer ${token.access_token}` 
+        },
+      };
+      const data = await fetch('https://api.spotify.com/v1/me', options)
+        .then(response => response.json());
+      
+      if (!data.error) {
+        const { display_name, email } = data;
+        const user = res.locals.user || {};
+        res.locals.user = { ...user, username: display_name, spotify_email: email };
+        res.locals.token = token;
+        return next();
+      }
     }
-
-    const options = {
-      method: 'get',
-      headers: { 
-        Authorization: `Bearer ${token.access_token}` 
-      },
-    };
-    const data = await fetch('https://api.spotify.com/v1/me', options)
-      .then(response => response.json());
     
-    if (data.error) {
-      res.status(403).json({ error: "Forbidden" });
-    } else {
-      const { display_name, email } = data;
-      const user = res.locals.user || {};
-      res.locals.user = { ...user, username: display_name, spotify_email: email };
-      return next();
-    }
+    next("Forbidden");
   });
 };
 
