@@ -9,8 +9,8 @@ CREATE TABLE users (
 );
 
 CREATE TABLE locations (
-   id             varchar(256)   PRIMARY KEY DEFAULT uuid_generate_v4(),
-   city           varchar(256)   NOT NULL                              ,
+   id             varchar(256)   PRIMARY KEY,
+   city           varchar(256)   NOT NULL   ,
    country        varchar(2)     NOT NULL
 );
 

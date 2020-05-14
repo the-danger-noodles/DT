@@ -75,6 +75,8 @@ userController.getFavs = async (req, res, next) => {
     [ user_id ]
   );
 
+  console.log(user_id, rows);
+
   res.locals.user.favsArray = rows;
   return next();
 };

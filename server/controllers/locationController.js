@@ -7,7 +7,7 @@ const { weather_api_key, google_api } = require('../secrets/secrets.js');
 const apiController = {};
 
 apiController.getLocationData = async (req, res, next) => {
-  const { id } = req.params.id;
+  const { id } = req.params;
 
   const { rows } = await db.query(`
     SELECT * FROM locations WHERE id = $1`, 
@@ -18,15 +18,21 @@ apiController.getLocationData = async (req, res, next) => {
 
   if (!rows.length) {
 
-    const { result } = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${id}&key=${google_api}`)
+    console.log(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${id}&key=${google_api}`);
+
+    const data = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${id}&key=${google_api}`)
       .then(response => response.json());
 
-    city = result.name;
-    countryCode = result.address_components.pop().short_name;
+    if (!data.result) {
+      return next("Bad Request");
+    }
+
+    city = data.result.name;
+    countryCode = data.result.address_components.pop().short_name;
 
     await db.query(`
-      INSERT INTO locations (city, country) VALUES($1, $2)`, 
-      [ city, countryCode ]
+      INSERT INTO locations (id, city, country) VALUES($1, $2, $3)`, 
+      [ id, city, countryCode ]
     );
   } else {
     city = rows[0].city;
