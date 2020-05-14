@@ -7,14 +7,17 @@ const db = require('../models/dbModels');
 
 router.use('/', authController.verify);
 
+router.use((err, req, res, next) => res.status(403).send("Forbidden"));
+
 router.get('/me', 
-  userController.getUser,
+  userController.getAuthUser,
   userController.getFavs,
   (req, res) => res.status(200).send(res.locals.user));
 
 router.put('/me/favorite/:location_id', 
-  userController.getUser,
-  userController.toggleFav);
+  userController.getAuthUser,
+  userController.toggleFav,
+  (req, res) => res.status(200).send());
 
 router.get('/location/:id', 
   apiController.getLocationData, 
@@ -23,5 +26,7 @@ router.get('/location/:id',
   apiController.getPlaylistData,
   (req, res) => res.status(200).json(res.locals.location)
 );
+
+router.use((err, req, res, next) => res.status(400).send("Bad Request"));
 
 module.exports = router;

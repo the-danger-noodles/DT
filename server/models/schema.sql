@@ -1,3 +1,7 @@
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS locations;
+DROP TABLE IF EXISTS favorites;
+
 CREATE TABLE users (
    id             uuid           PRIMARY KEY DEFAULT uuid_generate_v4(),
    spotify_email  varchar(256)   UNIQUE NOT NULL                       ,

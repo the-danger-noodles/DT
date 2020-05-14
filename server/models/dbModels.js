@@ -1,9 +1,9 @@
 const { Pool } = require('pg');
-const { pg_uri } = require('../secrets/secrets.js');
+const { pg_uri, pg_test_uri } = require('../secrets/secrets.js');
 
 // create a new pool here using the connection string above
 const pool = new Pool({
-  connectionString: pg_uri,
+  connectionString: process.env.TEST ? pg_test_uri : pg_uri,
 });
 
 // We export an object that contains a property called query,
