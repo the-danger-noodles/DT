@@ -69,13 +69,16 @@ apiController.getWeatherData = async (req, res, next) => {
   const data = await fetch(`https://api.openweathermap.org/data/2.5/weather?${query}`)
     .then((response) => response.json());
 
+    console.log(data);
+
   const { temp, feels_like, temp_min, temp_max, humidity } = data.main;
   const { sunrise, sunset } = data.sys;
+  const windSpeed = data.wind.speed;
   const timezone = data.timezone;
   const weather = data.weather[0].main;
 
   res.locals.location.weatherData = { 
-    temp, feels_like, temp_min, temp_max, humidity, sunrise, sunset, timezone, weather 
+    temp, feels_like, temp_min, temp_max, humidity, sunrise, sunset, timezone, weather, windSpeed
   };
   return next();
 };
@@ -91,11 +94,15 @@ apiController.getPlaylistData = async (req, res, next) => {
   const data = await fetch(url, options)
     .then((response) => response.json());
 
-  const playlist = data.playlists.items.find(playlist => playlist.name.indexOf('Top 50') !== -1);
-
-  if (!playlist) {
+  if (!data.playlists) {
     res.locals.location.trackList = [];
     return next();
+  }
+
+  let playlist = data.playlists.items.find(playlist => playlist.name.indexOf('Top 50') !== -1);
+
+  if (!playlist) {
+    playlist = data.playlists[0];
   }
 
   const tracks = await fetch(playlist.tracks.href, options)

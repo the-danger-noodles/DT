@@ -21,3 +21,5 @@ app.use('/', (req, res) => res.status(404).send("Not Found"));
 app.use((err, req, res, next) => res.status(500).send("Internal Server Error"));
 
 app.listen(port, () => console.log(`listening on port ${port}...`));
+
+module.exports = app;

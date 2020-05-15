@@ -6,7 +6,6 @@ const locationController = require('../controllers/locationController');
 const db = require('../models/dbModels');
 
 router.use('/', authController.verify);
-
 router.use((err, req, res, next) => res.status(403).send("Forbidden"));
 
 router.get('/me', 
