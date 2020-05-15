@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-filename-extension */
-import React from 'react';
+import React, { Component } from 'react'
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { FontAwesomeIcon as FAIcon } from '@fortawesome/react-fontawesome';
@@ -14,104 +14,117 @@ import SwitchContainer from './SwitchContainer';
 import Favorites from './Favorites';
 // import { ProgressPlugin } from 'webpack';
 
-function Home() {
-  // const useHistory =
-  const [current, setCurrent] = useState({});
-  //current is the bigAssObject we receive from "grabLocationData" that feeds most of the components with data
-  const [username, setUserName] = useState('');
-  //for welcoming
-  const [email, setEmail] = useState('');
-  //unique name to add favs to db
-  const [favorites, setFavorites] = useState([]);
-  //array of favs we got on initial load
-  const [query, setQuery] = useState('');
-  //save users search in case he wants to add it to favs(we only save his query, not actual country data
-  //since its different every time)
+// APP STATE
+// this.state = {
+//   isLoggedIn: undefined,
+//   defaultCity: {
+//     place_id: null,
+//     name: null,
+//   },
+//   user: {
+//     favsArray: [],
+//     id: "",
+//     spotify_email: "",
+//     username: ""
+//   },
+//   chosenCity: {
+//     place_id: null,
+//     name: null,
+//   },
+// }
 
-  //initial load
-  useEffect(() => {
-    fetch('/api/user')
-      .then((res) => res.json())
-      .then((user) => {
-        setUserName(user.display_name);
-        setEmail(user.email);
-        setFavorites(user.favsArray);
-      })
-      .catch((err) => err);
-  }, []);
-  //fires up on search submit and on click of fav city
-  const grabLocationData = (location) => {
-    if (!location) return;
-    //change the format of incoming string to add if as params
-    const locationString = location
-      .split(',')
-      .map((word) => word.trim())
-      .join('&');
-    fetch(`/api/${locationString}`)
-      .then((data) => data.json())
-      .then((response) => {
-        setCurrent(response);
-        setQuery(email + ', ' + response.userQuery);
-        // const destUrl = `/home/${response.userQuery}`;
-        // history.push(destUrl);
-      });
-  };
-  //toggle fav doesnt toggle, only adds fav, there is no way to remove it, sorry guys, we had no time:(
-  const toggleFav = (queryString) => {
-    //format the string for params
-    const values = queryString.split(',').map((elem) => elem.trim());
-    const city = values[1];
-    const country = values[2];
-    const userEmail = values[0];
-    fetch(`/api/toggleFav/${city}&${country}&${userEmail}`, {
-      method: 'POST',
-    })
-      .then((data) => data.json())
-      .then((updatedFavs) => {
-        setFavorites(updatedFavs);
-        //receive new array of favs and change the state
-      });
-  };
+// LOCATION DATA EXAMPLE
+// {
+//   "id": "ChIJKcumLf2bP44RFDmjIFVjnSM",
+//   "city": "Bogota",
+//   "countryCode": "CO",
+//   "country": {
+//     "name": "Colombia",
+//     "capital": "Bogotá",
+//     "region": "Americas",
+//     "area": 1141748,
+//     "population": 48759958,
+//     "flag": "https://restcountries.eu/data/col.svg",
+//     "languages": [
+//       "Spanish"
+//     ]
+//   },
+//   "weatherData": {
+//     "temp": 17,
+//     "feels_like": 15.77,
+//     "temp_min": 17,
+//     "temp_max": 17,
+//     "humidity": 72,
+//     "sunrise": 1589452976,
+//     "sunset": 1589497353,
+//     "timezone": -18000,
+//     "weather": "Clouds"
+//   },
+//   "trackList": [
+//     {
+//       "name": "Rojo",
+//       "by": "J Balvin",
+//       "url": "https://open.spotify.com/track/380HmhwTE2NJgawn1NwkXi"
+//     },
+    
+//   ]
+// }
 
-  if (!Object.keys(current).length) {
-    //there is no current - render only these..
-    return (
-      <div>
-        <div>
-          <Search grabLocationData={grabLocationData} />
-        </div>
-        <div className="welcoming">Welcome, {username}!</div>
-        <div>
-          <Favorites
-            favorites={favorites}
-            grabLocationData={grabLocationData}
-            setCurrent={setCurrent}
-          />
-        </div>
-      </div>
-    );
+
+
+export default class Home extends Component {
+  constructor(props){
+    super(props)
+    this.state = {}
   }
 
-  return (
-    <div id="main">
-      <Search grabLocationData={grabLocationData} />
+  componentDidMount() {
+    this.getLocationData();
+  }
 
-      <div className="welcoming">Welcome {username}!</div>
+  getLocationData() {
+    fetch(`/api/location/${this.props.chosenCity.place_id}`)
+      .then(response => response.json())
+      .then(payload => {
+        console.log("LOCATION RESPONSE", payload);
+        this.setState(payload)
+      })
+  }
 
-      <Weather
-        query={query}
-        weather={current.weatherData}
-        toggleFav={toggleFav}
-      />
-
-      <SwitchContainer
-        current={current}
-        favorites={favorites}
-        grabLocationData={grabLocationData}
-        setCurrent={setCurrent}
-      />
-    </div>
-  );
+  // User data is passed down as props.user
+  
+  render() {
+    console.log("STATE IN HOME", this.state)
+    if (this.state.id === undefined) {
+      return(
+        <h1>Loading</h1>
+      )
+    } else {
+      return (
+        <div id="main">
+          <Search updateCity={(cityDetails) => this.props.updateCity(cityDetails)} user={this.props.user} history={this.props.history} />
+  
+          <div className="welcoming">Welcome {this.props.user.username}!</div>
+  
+          <Weather
+            query={()=> console.log("CLICK")}
+            placeId={this.state.id}
+            weather={this.state.weatherData}
+            cityName={this.state.city}
+            changeFavorite={this.props.changeFavorite}
+          />
+  
+          <SwitchContainer
+            // city = {this.state.city}
+            changeFavorite={this.props.changeFavorite}
+            country={this.state.country}
+            updateCity={this.props.updateCity}
+            favorites={this.props.user.favsArray}
+            trackList={this.state.trackList}
+          />
+        </div>
+      )
+    }
+  }
 }
 
-export default Home;
