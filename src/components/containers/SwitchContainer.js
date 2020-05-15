@@ -25,16 +25,18 @@ function SwitchContainer(props) {
         <Switch>
           <div id="contentBox">
             <Route exact path="/Spotify">
-              <Spotify songs={props.current.trackList} />
+              <Spotify songs={props.trackList} />
             </Route>
             <Route exact path="/Window">
-              <Window country={props.current.countryData} />
+              <Window country={props.country} />
             </Route>
             <Route exact path="/Favorites">
               <Favorites
                 favorites={props.favorites}
-                grabLocationData={props.grabLocationData}
-                setCurrent={props.setCurrent}
+                changeFavorite={props.changeFavorite}
+                updateCity={props.updateCity}
+                // grabLocationData={props.grabLocationData}
+                setCurrent={() => console.log("clicked set current")}
               />
             </Route>
           </div>

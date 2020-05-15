@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Test</title>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAEoiWOV5UYY0ogJoSMi0AgctEoQ0kQlY&libraries=places"></script>
+</head>
+<body>
+  <input type="text" id="autocomplete"/>
+
+    <script>
+      // Grab the input element
+      let input = document.getElementById('autocomplete');
+      let autocomplete = new google.maps.places.Autocomplete(input,{types: ['(cities)']});
+      console.log(autocomplete)
+      
+
+      // Add event listener to element to capture typing
+      google.maps.event.addListener(autocomplete, 'place_changed', function(){
+        console.log("Autocomplete: ", autocomplete)
+        let place = autocomplete.getPlace();
+        console.log(place);
+      })
+    </script>
+</body>
+</html>

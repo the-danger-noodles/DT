@@ -8,14 +8,17 @@ function Favorites(props) {
     return <div id="favorites">You don't have any favorites yet</div>;
   const arrayOfCities = [];
   // console.log('Favorites on the props: ', props.favorites);
-  props.favorites.forEach((city, index) => {
+  props.favorites.forEach((fav, index) => {
     arrayOfCities.push(
       <City
-        grabLocationData={props.grabLocationData}
-        setCurrent={props.setCurrent}
-        key={`city` + index}
-        name={city}
-        locationString={props.cityCountrySearch}
+        changeFavorite={props.changeFavorite}
+        updateCity={props.updateCity}
+        // grabLocationData={props.grabLocationData}
+        // setCurrent={props.setCurrent}
+        key={`fav` + index}
+        place_id={fav.place_id}
+        name={fav.city}
+        // locationString={props.cityCountrySearch}
       />
     );
   });

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import Home from './Home';
 import SignIn from '../SignIn';
 import CityRedirect from '../CityRedirect';
@@ -25,6 +25,8 @@ export default class App extends Component {
         name: null,
       },
     }
+    this.setCurrentCity = this.setCurrentCity.bind(this);
+    this.changeFavorite = this.changeFavorite.bind(this);
   }
 
   componentDidMount() {
@@ -37,6 +39,7 @@ export default class App extends Component {
       .then(response => {
         if (response.status === 403) {
           this.setState({isLoggedIn: false});
+          throw Error("Not logged in")
         } else {
           return response.json()
         }
@@ -57,12 +60,14 @@ export default class App extends Component {
     navigator.geolocation.getCurrentPosition(x => { 
       lat = x.coords.latitude 
       long = x.coords.longitude
-      fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=${google_api}&libraries=places`)
+      fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=${google_api}&libraries=places&result_type=locality`)
       .then(response => response.json())
       .then(payload => {
+        let countryObj = payload.results[0].address_components.filter(obj => obj.types[0] === 'locality')
+        console.log(countryObj[0].city)
         let results = {
           place_id: payload.results[0].place_id,
-          name: payload.results[0].address_components[4].short_name,
+          name: countryObj[0].long_name,
         }
         this.setState({
           defaultCity: results,
@@ -72,6 +77,30 @@ export default class App extends Component {
     })
   }
 
+  setCurrentCity(cityDetails){
+    console.log("Inside setCurrentCity: ", cityDetails)
+    this.setState({chosenCity: cityDetails})
+  }
+
+  changeFavorite(place_id, value) {
+    const options = {
+      method: "PUT", 
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        toggle: value
+      })
+    };
+
+    fetch(`/api/me/favorite/${place_id}`, options)
+      .then(() => {
+        //success
+      })
+      .catch(err => {
+        //error
+      });
+  }
 
   render() {
     console.log("STATE IN RENDER", this.state)
@@ -84,12 +113,14 @@ export default class App extends Component {
     } else {
       return (
         <div id="app">
-          <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAEoiWOV5UYY0ogJoSMi0AgctEoQ0kQlY&libraries=places"></script>
           <Switch>
-            <CityRedirect exact path='/' defaultCity={this.state.defaultCity} />
+            <CityRedirect exact path='/' defaultCity={this.state.defaultCity} chosenCity={this.state.chosenCity} />
             <Route exact path='/signin' component={SignIn} />
             <Route path='/:city'>
-              <Home user={this.state.user} chosenCity={this.state.chosenCity} />
+              <Home user={this.state.user} 
+                chosenCity={this.state.chosenCity} 
+                changeFavorite={(place_id, value) => this.changeFavorite(place_id, value)}
+                updateCity={(cityDetails) => this.setCurrentCity(cityDetails)} />
             </Route>
           </Switch>
         </div>

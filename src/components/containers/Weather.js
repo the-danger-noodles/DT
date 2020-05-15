@@ -57,7 +57,7 @@ function Weather(props) {
     <span className="favIcon">
       <FAIcon
         onClick={() => {
-          props.toggleFav(props.query);
+          props.changeFavorite(props.placeIid, true);
         }}
         size="2x"
         icon={regStar}
@@ -77,10 +77,10 @@ function Weather(props) {
           {props.weather.weather === 'Clear' ? 'Clear' : props.weather.weather}
         </div>
         <div className="weather-text">
-          Wind: {Math.round(props.weather.windSpeed)} km/h
+          Wind: {Math.round(props.weather.windspeed)} km/h
         </div>
       </div>
-      <div id="locName">{props.query.split(',').slice(1, 2)}</div>
+      <div id="locName">{props.cityName}</div>
       <div>
         <FAIcon
           onClick={() => favClicked(id)}

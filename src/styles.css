@@ -24,6 +24,14 @@ body {
   padding: 10px;
 }
 
+#deleteFav {
+  font-size: 20px;
+  color: red;
+  font-weight: bold;
+  background: none;
+  border: none;
+}
+
 #locName {
   font-size: 4vw;
 }

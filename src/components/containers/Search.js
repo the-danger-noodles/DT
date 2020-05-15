@@ -1,25 +1,39 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-filename-extension */
-import React from 'react';
-import { useState } from 'react';
+import React, { Component } from 'react';
+import { Redirect } from 'react-router';
+import CityRedirect from '../CityRedirect';
 
-function Search(props) {
-  const [value, setValue] = useState('');
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    props.grabLocationData(value);
-    setValue('');
-  };
-  return (
-    <form id="searchForm" onSubmit={handleSubmit}>
-      <input
-        placeholder="Search the destination!"
-        onChange={(e) => setValue(e.target.value)}
-        value={value}
-      />
-      {/* <input value="Let's go!" type="submit" /> */}
-    </form>
-  );
+export default class Search extends Component {
+  constructor(props){
+    super(props)
+    this.handlePlaceChanged = this.handlePlaceChanged.bind(this);
+    this.place = null;
+  }
+  
+  componentDidMount() {
+    let input = document.getElementById('autocomplete');
+
+    this.autocomplete = new google.maps.places.Autocomplete(input,{types: ['(cities)']});
+    console.log(this.autocomplete)
+    // Add event listener to element to capture typing
+    this.autocomplete.addListener('place_changed', this.handlePlaceChanged)
+  }
+
+  handlePlaceChanged(){
+    const place = this.autocomplete.getPlace();
+    let resultObj = {
+      name: place.name,
+      place_id: place.place_id,
+    }
+    this.props.updateCity(resultObj);
+  }
+  
+  render() {
+    return (
+      <form id="searchForm" onSubmit={(event)=>{
+        event.preventDefault()
+      }}>
+        <input type="text" id="autocomplete"/>
+      </form>
+    );
+  }
 }
-
-export default Search;

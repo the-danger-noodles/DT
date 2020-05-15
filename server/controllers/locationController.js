@@ -18,9 +18,8 @@ apiController.getLocationData = async (req, res, next) => {
 
   if (!rows.length) {
 
-    console.log(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${id}&key=${google_api}`);
 
-    const data = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${id}&key=${google_api}`)
+    const data = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${id}&key=${google_api}&result_type=locality`)
       .then(response => response.json());
 
     if (!data.result) {

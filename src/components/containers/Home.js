@@ -33,12 +33,49 @@ import Favorites from './Favorites';
 //   },
 // }
 
+// LOCATION DATA EXAMPLE
+// {
+//   "id": "ChIJKcumLf2bP44RFDmjIFVjnSM",
+//   "city": "Bogota",
+//   "countryCode": "CO",
+//   "country": {
+//     "name": "Colombia",
+//     "capital": "Bogotá",
+//     "region": "Americas",
+//     "area": 1141748,
+//     "population": 48759958,
+//     "flag": "https://restcountries.eu/data/col.svg",
+//     "languages": [
+//       "Spanish"
+//     ]
+//   },
+//   "weatherData": {
+//     "temp": 17,
+//     "feels_like": 15.77,
+//     "temp_min": 17,
+//     "temp_max": 17,
+//     "humidity": 72,
+//     "sunrise": 1589452976,
+//     "sunset": 1589497353,
+//     "timezone": -18000,
+//     "weather": "Clouds"
+//   },
+//   "trackList": [
+//     {
+//       "name": "Rojo",
+//       "by": "J Balvin",
+//       "url": "https://open.spotify.com/track/380HmhwTE2NJgawn1NwkXi"
+//     },
+    
+//   ]
+// }
+
+
+
 export default class Home extends Component {
   constructor(props){
     super(props)
-    this.state = {
-
-    }
+    this.state = {}
   }
 
   componentDidMount() {
@@ -46,39 +83,48 @@ export default class Home extends Component {
   }
 
   getLocationData() {
-    fetch(`/location/${this.props.chosenCity.place_id}`)
+    fetch(`/api/location/${this.props.chosenCity.place_id}`)
       .then(response => response.json())
-      .then(payload => console.log(payload))
-  }
-
-  changeFavorite() {
-
+      .then(payload => {
+        console.log("LOCATION RESPONSE", payload);
+        this.setState(payload)
+      })
   }
 
   // User data is passed down as props.user
   
   render() {
-    return (
-      <div id="main">
-        {/* <Search // grabLocationData={grabLocationData}
-         />
-
-        <div className="welcoming">Welcome {this.props.user.username}!</div>
-
-        <Weather
-          // query={query}
-          // weather={current.weatherData}
-          // toggleFav={toggleFav}
-        />
-
-        <SwitchContainer
-          // current={current}
-          // favorites={props.user.favorites}
-          // grabLocationData={grabLocationData}
-          // setCurrent={setCurrent}
-        /> */}
-      </div>
-    )
+    console.log("STATE IN HOME", this.state)
+    if (this.state.id === undefined) {
+      return(
+        <h1>Loading</h1>
+      )
+    } else {
+      return (
+        <div id="main">
+          <Search updateCity={(cityDetails) => this.props.updateCity(cityDetails)} user={this.props.user} history={this.props.history} />
+  
+          <div className="welcoming">Welcome {this.props.user.username}!</div>
+  
+          <Weather
+            query={()=> console.log("CLICK")}
+            placeId={this.state.id}
+            weather={this.state.weatherData}
+            cityName={this.state.city}
+            changeFavorite={this.props.changeFavorite}
+          />
+  
+          <SwitchContainer
+            // city = {this.state.city}
+            changeFavorite={this.props.changeFavorite}
+            country={this.state.country}
+            updateCity={this.props.updateCity}
+            favorites={this.props.user.favsArray}
+            trackList={this.state.trackList}
+          />
+        </div>
+      )
+    }
   }
 }
 

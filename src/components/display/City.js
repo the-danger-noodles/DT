@@ -6,11 +6,12 @@ function City(props) {
   return (
     <div
       className="cityCard"
-      onClick={() =>
-        props.grabLocationData(`${props.name.city}, ${props.name.country}`)
-      }
-    >
-      <span className="cityName">{props.name.city}</span>
+      onClick={() => {
+        props.updateCity({ name: props.name, place_id: props.place_id });
+        // props.grabLocationData(`${props.name.city}, ${props.name.country}`)
+      }}>
+      <div className="cityName">{props.name}</div>
+      <button id="deleteFav" onClick={() => props.changeFavorite(props.place_id, false)}>X</button>
     </div>
   );
 }

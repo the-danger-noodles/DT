@@ -61,7 +61,6 @@ userController.toggleFav = async (req, res, next) => {
 };
 
 userController.getFavs = async (req, res, next) => {
-  console.log("in get favs")
   const user_id = res.locals.user.id;
 
   if (!user_id) {
@@ -74,8 +73,6 @@ userController.getFavs = async (req, res, next) => {
     WHERE user_id = $1`, 
     [ user_id ]
   );
-
-  console.log(user_id, rows);
 
   res.locals.user.favsArray = rows;
   return next();
